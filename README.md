@@ -112,11 +112,13 @@ a_star(start, goal, graph, H)
 
 ```
 
-SAMPLE GRAPH I
+### SAMPLE GRAPH I
+
 <img width="233" height="493" alt="Screenshot 2025-10-08 140420" src="https://github.com/user-attachments/assets/33c60b1e-227e-4fd0-a742-5d8453acb824" />
 
 
-SAMPLE INPUT
+### SAMPLE INPUT
+
  5 7 <br>
  A B 1 <br>
  A C 3 <br>
@@ -134,7 +136,8 @@ SAMPLE INPUT
  E <br>
  <br>
 <hr>
-Sample Output
+
+### Sample Output
 
 
 <img width="621" height="740" alt="Screenshot 2025-10-08 140048" src="https://github.com/user-attachments/assets/5f25eb20-fbb3-4b39-8948-2cfd253089cd" />
@@ -150,7 +153,9 @@ Sample Output
 
 
 <hr>
-<h2>Sample Input</h2>
+<h2>
+
+### Sample Input</h2>
 <hr>
  5 6 <br>
  S A 2 <br>
@@ -168,7 +173,7 @@ Sample Output
  G <br>
 <hr>
 
-SAMPLE OUTPUT
+### SAMPLE OUTPUT
 
 <img width="634" height="717" alt="Screenshot 2025-10-08 140856" src="https://github.com/user-attachments/assets/40caeeeb-e14f-4ba5-9a5f-1662649ab003" />
 
