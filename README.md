@@ -50,109 +50,94 @@
 
 ## PROGRAM
 ```python
-
 from collections import defaultdict
-H_dist ={}
-def aStarAlgo(start_node, stop_node):
-    open_set = set(start_node)
+
+def a_star(start, goal, graph, H):
+    open_set = {start}
     closed_set = set()
-    g = {}  
-    parents = {}   
-    g[start_node] = 0
-    parents[start_node] = start_node
-    while len(open_set) > 0:
-        n = None
-        for v in open_set:
-            if n == None or g[v] + heuristic(v) < g[n] + heuristic(n):
-                n = v
-        if n == stop_node or Graph_nodes[n] == None:
-            pass
-        else:
-            for (m, weight) in get_neighbors(n):
-                if m not in open_set and m not in closed_set:
-                    open_set.add(m)
-                    parents[m] = n
-                    g[m] = g[n] + weight
-                else:
-                    if g[m] > g[n] + weight:
-                        g[m] = g[n] + weight
-                        parents[m] = n
-                        if m in closed_set:
-                            closed_set.remove(m)
-                            open_set.add(m)
-        if n == None:
-            print("Path does not exist!")
-            return None
-        if n == stop_node:
+    g = {start: 0}
+    parent = {start: None}
+
+    while open_set:
+        # Pick node with minimum f = g + h
+        n = min(open_set, key=lambda x: g[x] + H[x])
+
+        if n == goal:
             path = []
-            while parents[n] != n:
+            while n is not None:
                 path.append(n)
-                n = parents[n]
-            path.append(start_node)
+                n = parent[n]
             path.reverse()
-            print('Path found: {}'.format(path))
-            return path
+            print("Path found:", path)
+            return
+
         open_set.remove(n)
         closed_set.add(n)
-    print('Path does not exist!')
-    return None
-def get_neighbors(v):
-    if v in Graph_nodes:
-        return Graph_nodes[v]
-    else:
-        return None
-def heuristic(n):
-    return H_dist[n]
+
+        for (m, cost) in graph[n]:
+            if m in closed_set:
+                continue
+            new_g = g[n] + cost
+            if m not in open_set or new_g < g.get(m, float('inf')):
+                g[m] = new_g
+                parent[m] = n
+                open_set.add(m)
+
+    print("Path does not exist!")
+
+
+# --- Input section ---
 graph = defaultdict(list)
-n,e = map(int,input().split())
-for i in range(e):
-    u,v,cost = map(str,input().split())
-    t=(v,int(cost))
-    graph[u].append(t)
-    t1=(u,int(cost))
-    graph[v].append(t1)
-for i in range(n):
-    node,h=map(str,input().split())
-    H_dist[node]=int(h)
-Graph_nodes=graph
-start=input()
-goal=input()
-aStarAlgo(start, goal)
+n, e = map(int, input("Enter number of nodes and edges: ").split())
+
+print("\nEnter each edge in the format: node1 node2 cost")
+for _ in range(e):
+    u, v, cost = input().split()
+    cost = int(cost)
+    graph[u].append((v, cost))
+    graph[v].append((u, cost))  # undirected graph
+
+H = {}
+print("\nEnter heuristic value for each node:")
+for _ in range(n):
+    node, h = input().split()
+    H[node] = int(h)
+
+start = input("\nEnter start node: ")
+goal = input("Enter goal node: ")
+
+print("\n--- A* Search Result ---")
+a_star(start, goal, graph, H)
+
+
 ```
 
 SAMPLE GRAPH I
-![277151990-b1377c3f-011a-4c0f-a843-516842ae056a](https://github.com/user-attachments/assets/bedfaca4-a69a-468a-957d-a3def3f28836)
+<img width="233" height="493" alt="Screenshot 2025-10-08 140420" src="https://github.com/user-attachments/assets/33c60b1e-227e-4fd0-a742-5d8453acb824" />
+
 
 SAMPLE INPUT
-10 14 <br>
-A B 6 <br>
-A F 3 <br>
-B D 2 <br>
-B C 3 <br>
-C D 1 <br>
-C E 5 <br>
-D E 8 <br>
-E I 5 <br>
-E J 5 <br>
-F G 1 <br>
-G I 3 <br>
-I J 3 <br>
-F H 7 <br>
-I H 2 <br>
-A 10 <br>
-B 8 <br>
-C 5 <br>
-D 7 <br>
-E 3 <br>
-F 6 <br>
-G 5 <br>
-H 3 <br>
-I 1 <br>
-J 0 <br>
+ 5 7 <br>
+ A B 1 <br>
+ A C 3 <br>
+ B C 1 <br>
+ B D 4 <br>
+ C D 2 <br>
+ D E 5 <br>
+ C E 6 <br>
+ A 10 <br>
+ B 8 <br>
+ C 5 <br>
+ D 7 <br>
+ E 0 <br>
+ A <br>
+ E <br>
+ <br>
 <hr>
 Sample Output
 
-![435098048-ac8a5725-93b0-44e9-bba7-8a32d7ee80ee](https://github.com/user-attachments/assets/23a66732-b6f5-4b74-8eae-e3e21b0f6814)
+
+<img width="621" height="740" alt="Screenshot 2025-10-08 140048" src="https://github.com/user-attachments/assets/5f25eb20-fbb3-4b39-8948-2cfd253089cd" />
 
 
 
@@ -161,30 +146,31 @@ Sample Output
 <h2>Sample Graph II</h2>
 <hr>
 
-![image](https://github.com/natsaravanan/19AI405FUNDAMENTALSOFARTIFICIALINTELLIGENCE/assets/87870499/acbb09cb-ed39-48e5-a59b-2f8d61b978a3)
+<img width="252" height="505" alt="Screenshot 2025-10-08 140536" src="https://github.com/user-attachments/assets/e6927252-5c14-4d69-b028-daa543547404" />
 
 
 <hr>
 <h2>Sample Input</h2>
 <hr>
-6 6 <br>
-A B 2 <br>
-B C 1 <br>
-A E 3 <br>
-B G 9 <br>
-E D 6 <br>
-D G 1 <br>
-A 11 <br>
-B 6 <br>
-C 99 <br>
-E 7 <br>
-D 1 <br>
-G 0 <br>
+ 5 6 <br>
+ S A 2 <br>
+ S B 4 <br>
+ A C 7 <br>
+ B C 1 <br>
+ C G 3 <br>
+ B G 8 <br>
+ S 7 <br>
+ A 6 <br>
+ B 2 <br>
+ C 1 <br>
+ G 0 <br>
+ S <br>
+ G <br>
 <hr>
 
 SAMPLE OUTPUT
 
-![435098114-175123a9-8519-4ec4-b3f6-1151b674380d](https://github.com/user-attachments/assets/91f98b2e-c195-45de-9dbf-19bc17dbfb8f)
+<img width="634" height="717" alt="Screenshot 2025-10-08 140856" src="https://github.com/user-attachments/assets/40caeeeb-e14f-4ba5-9a5f-1662649ab003" />
 
 ## RESULT
 Thus the above python program for A* Search has executed successfully.
